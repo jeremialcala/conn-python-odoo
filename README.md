@@ -1,2 +1,5 @@
-# conn-python-odoo
-Simple connector for Odoo using odoorpc.
+# Odoo connector module (conn-python-odoo)
+
+This is a simple connector for Odoo using odoorpc.
+
+
