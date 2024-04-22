@@ -23,6 +23,8 @@ class Settings(BaseSettings):
     qms_server: str
     qms_user: str
     qms_password: str
+    amqp_exchange: str
+    amqp_routing_key: str
 
     key_size: int
     private_key_filename: str
