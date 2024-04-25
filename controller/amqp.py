@@ -7,10 +7,16 @@ import functools
 from datetime import datetime
 from uuid import UUID, uuid4
 from asyncio import ensure_future
+from typing import List, Literal, Optional, Tuple, TypedDict
+
 from inspect import currentframe
 from classes import Settings
+
 from utils import configure_logging, timeit
-from typing import List, Literal, Optional, Tuple, TypedDict
+
+from .odoo import get_product_data_by_name
+
+
 
 _set = Settings()
 log = logging.getLogger(__name__)
@@ -31,7 +37,7 @@ def get_amqp_connection():
 @timeit
 def on_message(_channel, method_frame, header_frame, body, args):
     log.info(f"Starting: {currentframe().f_code.co_name}")
-    (_connection, _threads, model, tokenizer) = args
+    (_connection, _threads) = args
     delivery_tag = method_frame.delivery_tag
     t = threading.Thread(target=do_work, args=(_connection, _channel, delivery_tag, body))
     t.start()
@@ -44,8 +50,15 @@ def do_work(connection, channel, delivery_tag, body):
     thread_id = threading.get_ident()
     fmt1 = 'Thread id: {} Delivery tag: {} Message body: {}'
     log.info(fmt1.format(thread_id, delivery_tag, body))
+    _body = json.loads(body.decode("utf-8"))
 
     try:
+        match _body["jwe_body"]["type"]:
+            case "product":
+                """
+                    This is a inquiry of product by name (ex. /PROD Coca-Cola) 
+                """
+                get_product_data_by_name()
 
         cb = functools.partial(ack_message, channel, delivery_tag)
         connection.add_callback_threadsafe(cb)

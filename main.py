@@ -8,7 +8,7 @@ import threading
 
 from inspect import currentframe
 from classes import Settings
-from utils import configure_logging, timeit
+from utils import configure_logging
 from controller import on_message, get_amqp_connection
 
 _set = Settings()
@@ -17,7 +17,6 @@ log = logging.getLogger(__name__)
 logging.config.dictConfig(configure_logging())
 
 
-@timeit
 def get_help():
     """
     This get messages from a AMQP, This module use case is the data management with and Odoo server.
@@ -60,7 +59,7 @@ if __name__ == '__main__':
     configure_logging()
     log.info(f"Starting: {currentframe().f_code.co_name}")
 
-    if "--help" in sys.argv or len(sys.argv) == 1:
+    if "--help" in sys.argv:
         print(get_help.__doc__)
         sys.exit(0)
 

@@ -1,9 +1,10 @@
 import time
 import logging
-from logging import config
-from functools import wraps
-from .logging import configure_logging
+import logging.config
 
+from functools import wraps
+
+from utils import configure_logging
 
 log = logging.getLogger(__name__)
 logging.config.dictConfig(configure_logging())

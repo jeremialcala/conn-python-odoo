@@ -49,4 +49,15 @@ class Settings(BaseSettings):
 
     api_url: str
 
+    odoo_host: str
+    odoo_port: str
+    odoo_db: str
+    odoo_user: str
+    odoo_pass: str
+
+    entity_partner: str
+    entity_product: str
+    entity_order: str
+    entity_user: str
+
     model_config = SettingsConfigDict(env_file="config.env")
